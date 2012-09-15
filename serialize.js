@@ -151,14 +151,14 @@ $rdf.Serializer = function() {
 			if (!incoming[x])
 				incoming[x] = [];
 			incoming[x].push(st.subject); // List of things which will cause
-											// this to be printed
+			// this to be printed
 			var ss = subjects[sz.toStr(st.subject)]; // Statements with this
-														// as subject
+			// as subject
 			if (!ss)
 				ss = [];
 			ss.push(st);
 			subjects[this.toStr(st.subject)] = ss; // Make hash. @@ too slow
-													// for formula?
+			// for formula?
 			// $rdf.log.debug(' sz potential subject: '+sts[i].subject)
 		}
 
@@ -173,7 +173,7 @@ $rdf.Serializer = function() {
 			}
 		}
 		this.incoming = incoming; // Keep for serializing @@ Bug for nested
-									// formulas
+		// formulas
 
 		// ////////// New bit for CONNECTED bnode loops:frootshash
 
@@ -188,27 +188,26 @@ $rdf.Serializer = function() {
 		 * dummyPropertyTree(subject, subjects, rootsHash) { //
 		 * dump('dummyPropertyTree('+subject+'...)\n'); var sts =
 		 * subjects[sz.toStr(subject)]; // relevant statements for (var i=0; i<sts.length;
-		 * i++) { dummyObjectTree(sts[i].object, subjects, rootsHash); } }
-		 *  // Convert a set of statements into a nested tree of lists and
-		 * strings // @param force, "we know this is a root, do it anyway. It
-		 * isn't a loop." function dummyObjectTree(obj, subjects, rootsHash,
-		 * force) { // dump('dummyObjectTree('+obj+'...)\n'); if (obj.termType ==
-		 * 'bnode' && (subjects[sz.toStr(obj)] && (force ||
-		 * (rootsHash[obj.toNT()] == undefined )))) {// and there are statements
-		 * if (doneBnodesNT[obj.toNT()]) { // Ah-ha! a loop throw "Serializer:
+		 * i++) { dummyObjectTree(sts[i].object, subjects, rootsHash); } } //
+		 * Convert a set of statements into a nested tree of lists and strings //
+		 * @param force, "we know this is a root, do it anyway. It isn't a
+		 * loop." function dummyObjectTree(obj, subjects, rootsHash, force) { //
+		 * dump('dummyObjectTree('+obj+'...)\n'); if (obj.termType == 'bnode' &&
+		 * (subjects[sz.toStr(obj)] && (force || (rootsHash[obj.toNT()] ==
+		 * undefined )))) {// and there are statements if
+		 * (doneBnodesNT[obj.toNT()]) { // Ah-ha! a loop throw "Serializer:
 		 * Should be no loops "+obj; } doneBnodesNT[obj.toNT()] = true; return
 		 * dummyPropertyTree(obj, subjects, rootsHash); } return
-		 * dummyTermToN3(obj, subjects, rootsHash); }
-		 *  // Scan for bnodes nested inside lists too function
-		 * dummyTermToN3(expr, subjects, rootsHash) { if (expr.termType ==
-		 * 'bnode') doneBnodesNT[expr.toNT()] = true; //
+		 * dummyTermToN3(obj, subjects, rootsHash); } // Scan for bnodes nested
+		 * inside lists too function dummyTermToN3(expr, subjects, rootsHash) {
+		 * if (expr.termType == 'bnode') doneBnodesNT[expr.toNT()] = true; //
 		 * $rdf.log.debug('serialize: seen '+expr); if (expr.termType ==
 		 * 'collection') { for (i=0; i<expr.elements.length; i++) { if
 		 * (expr.elements[i].termType == 'bnode')
-		 * dummyObjectTree(expr.elements[i], subjects, rootsHash); } return; } }
-		 *  // The tree for a subject function dummySubjectTree(subject,
-		 * subjects, rootsHash) { // dump('dummySubjectTree('+subject+'...)\n');
-		 * if (subject.termType == 'bnode' && !incoming[subject]) return
+		 * dummyObjectTree(expr.elements[i], subjects, rootsHash); } return; } } //
+		 * The tree for a subject function dummySubjectTree(subject, subjects,
+		 * rootsHash) { // dump('dummySubjectTree('+subject+'...)\n'); if
+		 * (subject.termType == 'bnode' && !incoming[subject]) return
 		 * dummyObjectTree(subject, subjects, rootsHash, true); // Anonymous
 		 * bnode subject dummyTermToN3(subject, subjects, rootsHash);
 		 * dummyPropertyTree(subject, subjects, rootsHash); }
@@ -222,14 +221,13 @@ $rdf.Serializer = function() {
 		/*
 		 * for (var i=0; i<roots.length; i++) { var root = roots[i];
 		 * dummySubjectTree(root, subjects, rootsHash); } // dump('Looking for
-		 * mising bnodes...\n')
-		 *  // Now in new roots for anythig not acccounted for // Now we check
-		 * for any bndoes which have not been covered. // Such bnodes must be in
-		 * isolated rings of pure bnodes. // They each have incoming link of 1.
-		 *  // $rdf.log.debug('serialize.js Looking for connected bnode
-		 * loops\n') for (;;) { var bnt; var found = null; for (bnt in
-		 * allBnodes) { // @@ Note: not repeatable. No canonicalisation if
-		 * (doneBnodesNT[bnt]) continue; found = bnt; // Ah-ha! not covered
+		 * mising bnodes...\n') // Now in new roots for anythig not acccounted
+		 * for // Now we check for any bndoes which have not been covered. //
+		 * Such bnodes must be in isolated rings of pure bnodes. // They each
+		 * have incoming link of 1. // $rdf.log.debug('serialize.js Looking for
+		 * connected bnode loops\n') for (;;) { var bnt; var found = null; for
+		 * (bnt in allBnodes) { // @@ Note: not repeatable. No canonicalisation
+		 * if (doneBnodesNT[bnt]) continue; found = bnt; // Ah-ha! not covered
 		 * break; } if (found == null) break; // All done - no bnodes left out/ //
 		 * dump('Found isolated bnode:'+found+'\n'); doneBnodesNT[bnt] = true;
 		 * var root = this.store.fromNT(found); roots.push(root); // Add a new
@@ -304,11 +302,11 @@ $rdf.Serializer = function() {
 					var substr = treeToString(branch, level + 1);
 					if (substr.length < 10 * (width - indent * level)
 							&& substr.indexOf('"""') < 0) {// Don't mess up
-															// multiline strings
+						// multiline strings
 						var line = treeToLine(branch);
 						if (line.length < (width - indent * level)) {
 							branch = '   ' + line; // @@ Hack: treat as string
-													// below
+							// below
 							substr = '';
 						}
 					}
@@ -320,8 +318,8 @@ $rdf.Serializer = function() {
 					if (branch.length == '1' && str.slice(-1) == '\n') {
 						if (",.;".indexOf(branch) >= 0) {
 							str = str.slice(0, -1) + branch + '\n'; // slip
-																	// punct'n
-																	// on end
+							// punct'n
+							// on end
 							lastLength += 1;
 							continue;
 						} else if ("])}".indexOf(branch) >= 0) {
@@ -364,8 +362,8 @@ $rdf.Serializer = function() {
 		function subjectTree(subject, stats) {
 			if (subject.termType == 'bnode' && !stats.incoming[subject])
 				return objectTree(subject, stats, true).concat([ "." ]); // Anonymous
-																			// bnode
-																			// subject
+			// bnode
+			// subject
 			return [ termToN3(subject, stats) ].concat(
 					[ propertyTree(subject, stats) ]).concat([ "." ]);
 		}
@@ -376,7 +374,7 @@ $rdf.Serializer = function() {
 			var results = [];
 			var lastPred = null;
 			var sts = stats.subjects[sz.toStr(subject)]; // relevant
-															// statements
+			// statements
 			if (typeof sts == 'undefined') {
 				throw ('Cant find statements for ' + subject);
 			}
@@ -404,11 +402,11 @@ $rdf.Serializer = function() {
 
 		function objectTree(obj, stats, force) {
 			if (obj.termType == 'bnode' && stats.subjects[sz.toStr(obj)] && // and
-																			// there
-																			// are
-																			// statements
+			// there
+			// are
+			// statements
 			(force || stats.rootsHash[obj.toNT()] == undefined)) // and not a
-																	// root
+				// root
 				return [ '[' ].concat(propertyTree(obj, stats)).concat([ ']' ]);
 			return termToN3(obj, stats);
 		}
@@ -477,7 +475,7 @@ $rdf.Serializer = function() {
 			if (expr.lang)
 				str += '@' + expr.lang;
 			if (expr.datatype)
-				str += '^^' + termToN3(expr.datatype, stats);
+				str += '^^' + this.termToN3(expr.datatype, stats);
 			return str;
 		case 'symbol':
 			return this.symbolToN3(expr);
@@ -488,8 +486,25 @@ $rdf.Serializer = function() {
 		}
 	};
 
-	// stringToN3: String escaping for N3
-	//
+	__Serializer.prototype.termToN3 = function termToN3(expr, stats) {
+		switch (expr.termType) {
+		case 'formula':
+			var res = [ '{' ];
+			res = res.concat(statementListToTree(expr.statements));
+			return res.concat([ '}' ]);
+
+		case 'collection':
+			var res = [ '(' ];
+			for ( var i = 0; i < expr.elements.length; i++) {
+				res.push([ objectTree(expr.elements[i], stats) ]);
+			}
+			res.push(')');
+			return res;
+
+		default:
+			return this.atomicTermToN3(expr);
+		}
+	};
 
 	__Serializer.prototype.forbidden1 = new RegExp(
 			/[\\"\b\f\r\v\t\n\u0080-\uffff]/gm);
@@ -525,7 +540,7 @@ $rdf.Serializer = function() {
 			} else {
 
 				var k = '\b\f\r\t\v\n\\"'.indexOf(ch); // No escaping of bell
-														// (7)?
+				// (7)?
 				if (k >= 0) {
 					res += "\\" + 'bfrtvn\\"'[k];
 				} else {
@@ -547,16 +562,16 @@ $rdf.Serializer = function() {
 	// A single symbol, either in <> or namespace notation
 
 	__Serializer.prototype.symbolToN3 = function symbolToN3(x) { // c.f.
-																	// symbolString()
-																	// in
-																	// notation3.py
+		// symbolString()
+		// in
+		// notation3.py
 		var uri = x.uri;
 		var j = uri.indexOf('#');
 		if (j < 0 && this.flags.indexOf('/') < 0) {
 			j = uri.lastIndexOf('/');
 		}
 		if (j >= 0 && this.flags.indexOf('p') < 0) { // Can split at
-														// namespace
+			// namespace
 			var canSplit = true;
 			for ( var k = j + 1; k < uri.length; k++) {
 				if (__Serializer.prototype._notNameChars.indexOf(uri[k]) >= 0) {
@@ -569,7 +584,7 @@ $rdf.Serializer = function() {
 				var namesp = uri.slice(0, j + 1);
 				if (this.defaultNamespace && this.defaultNamespace == namesp
 						&& this.flags.indexOf('d') < 0) {// d -> suppress
-															// default
+					// default
 					if (this.flags.indexOf('k') >= 0
 							&& this.keyords.indexOf(localid) < 0)
 						return localid;
@@ -606,8 +621,8 @@ $rdf.Serializer = function() {
 			k = str.charCodeAt(i);
 			if (k > 65535)
 				res += '\\U' + ('00000000' + n.toString(16)).slice(-8); // convert
-																		// to
-																		// upper?
+			// to
+			// upper?
 			else if (k > 126)
 				res += '\\u' + ('0000' + n.toString(16)).slice(-4);
 			else
@@ -633,7 +648,7 @@ $rdf.Serializer = function() {
 
 		var sources = this.store.index[3];
 		for (s in sources) { // -> assume we can use -> as short for
-								// log:semantics
+			// log:semantics
 			var source = kb.fromNT(s);
 			if (session && source.sameTerm(session))
 				continue;
@@ -687,11 +702,11 @@ $rdf.Serializer = function() {
 					var substr = XMLtreeToString(branch, level + 1);
 					if (substr.length < 10 * (width - indent * level)
 							&& substr.indexOf('"""') < 0) {// Don't mess up
-															// multiline strings
+						// multiline strings
 						var line = XMLtreeToLine(branch);
 						if (line.length < (width - indent * level)) {
 							branch = '   ' + line; // @@ Hack: treat as string
-													// below
+							// below
 							substr = '';
 						}
 					}
@@ -768,7 +783,7 @@ $rdf.Serializer = function() {
 		function propertyXMLTree(subject, stats) {
 			var results = [];
 			var sts = stats.subjects[sz.toStr(subject)]; // relevant
-															// statements
+			// statements
 			if (sts == undefined)
 				return results; // No relevant statements
 			sts.sort();
@@ -777,12 +792,12 @@ $rdf.Serializer = function() {
 				switch (st.object.termType) {
 				case 'bnode':
 					if (stats.rootsHash[st.object.toNT()]) { // This bnode
-																// has been done
-																// as a root --
-																// no content
-																// here @@ what
-																// bout first
-																// time
+						// has been done
+						// as a root --
+						// no content
+						// here @@ what
+						// bout first
+						// time
 						results = results.concat([
 								'<' + qname(st.predicate) + ' rdf:nodeID="'
 										+ st.object.toNT().slice(2) + '">',

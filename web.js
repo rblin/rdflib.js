@@ -628,8 +628,13 @@ $rdf.Fetcher = function(store, timeout, async) {
 				callback();
 			return (uri2 != uri); // Call me again?
 		});
-		if (sta == 'unrequested')
-			this.requestURI(uri, referringTerm, false);
+		if (sta == 'unrequested'){
+			if($rdf.Fetcher.crossSiteProxy(uri)){
+				this.requestURI($rdf.Fetcher.crossSiteProxy(uri), referringTerm, false);
+			}else{
+				this.requestURI(uri, referringTerm, false);
+			}
+		}
 	};
 
 	/**
